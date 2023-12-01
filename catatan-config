@@ -1,1 +1,15 @@
 build tools -> maven ==> maven 3
+
+membuat user baru di database mongodb
+bisa menggunakan mongodb compass
+1. pada footer, klik _mongosh
+2. ganti dulu ke user admin :
+    use admin
+3. buat user baru dengan perintah db.createUser :
+    db.createUser({
+      user: "nama_pengguna",
+      pwd: "kata_sandi_anda",
+      roles: ["root"]
+    })
+   misal:
+    db.createUser({ user: "spring01", pwd: "spring01)(*", roles: ["root"] })
