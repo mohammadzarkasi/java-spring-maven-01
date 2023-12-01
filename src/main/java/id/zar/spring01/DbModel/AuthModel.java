@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 
 @Data
-@Builder
+//@Builder
 @Document
 public class AuthModel {
     @Id
