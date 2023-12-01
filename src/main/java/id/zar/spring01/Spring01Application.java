@@ -14,13 +14,12 @@ public class Spring01Application {
 		SpringApplication.run(Spring01Application.class, args);
 	}
 
-	@Bean
-	CommandLineRunner runner(AuthRepository repo)
-	{
-		return args -> {
-//			AuthModel auth = new AuthModel();
-			AuthModel auth = AuthModel.builder().username("admin").password("123").email("admin@gmail.com").build();
-			repo.insert(auth);
-		};
-	}
+//	@Bean
+//	CommandLineRunner runner(AuthRepository repo)
+//	{
+//		return args -> {
+//			AuthModel auth = AuthModel.builder().username("admin").password("123").email("admin@gmail.com").build();
+//			repo.insert(auth);
+//		};
+//	}
 }
