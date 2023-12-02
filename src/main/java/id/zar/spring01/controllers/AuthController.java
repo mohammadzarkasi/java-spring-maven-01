@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("api/v1/auth")
@@ -23,24 +22,30 @@ public class AuthController {
     {
         var result = authService.loginByUsername("admin");
 
-        if(result == null)
-        {
-            return null;
-        }
+        var response = new LoginResponseModel();
+
+//        if(result == null)
+//        {
+//            response
+//        }
 
 //        if(result == null)
 //        {
 //            return new ResponseEntity<>()
 //        }
 
-        var response = new LoginResponseModel();
 
 
-//        if(result != null)
-//        {
+
+        if(result != null)
+        {
             response.setInfo(result.toString());
 //            return "username->admin ditemukan::" + result;
-//        }
+        }
+        else
+        {
+            response.setStatus(HttpStatus.NOT_FOUND);
+        }
 //        return "username->admin tidak ditemukan";
 
         return response;
