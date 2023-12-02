@@ -1,4 +1,4 @@
-package id.zar.spring01.HttpResponseModel;
+package id.zar.spring01.HttpModel.Responses;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

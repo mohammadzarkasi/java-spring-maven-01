@@ -1,12 +1,15 @@
 package id.zar.spring01.controllers;
 
-import id.zar.spring01.HttpResponseModel.LoginResponseModel;
+import id.zar.spring01.DbModel.AuthModel;
+import id.zar.spring01.HttpModel.Request.LoginRequestModel;
+import id.zar.spring01.HttpModel.Request.RegisterRequestModel;
+import id.zar.spring01.HttpModel.Responses.LoginResponseModel;
+import id.zar.spring01.HttpModel.Responses.RegisterResponseModel;
 import id.zar.spring01.service.AuthService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("api/v1/auth")
@@ -17,10 +20,10 @@ public class AuthController {
         this.authService=authService;
     }
 
-    @GetMapping
-    public LoginResponseModel cobaLogin()
+    @PostMapping
+    public LoginResponseModel cobaLogin(@RequestBody LoginRequestModel data)
     {
-        var result = authService.loginByUsername("admin");
+        var result = authService.findByUsername(data.getUsername());
 
         var response = new LoginResponseModel();
 
@@ -39,11 +42,22 @@ public class AuthController {
 
         if(result != null)
         {
-            response.setInfo(result.toString());
+
+            if(result.getPassword().equals(data.getPassword()))
+            {
+                response.setInfo("data sesuai");
+            }
+            else
+            {
+                response.setInfo("password tidak cocok");
+                response.setStatus(HttpStatus.NOT_FOUND);
+            }
+//            response.setInfo(result.toString());
 //            return "username->admin ditemukan::" + result;
         }
         else
         {
+            response.setInfo("data tidak ditemukan");
             response.setStatus(HttpStatus.NOT_FOUND);
         }
 //        return "username->admin tidak ditemukan";
@@ -51,5 +65,55 @@ public class AuthController {
         return response;
     }
 
+    @PostMapping(value = "register")
+    public RegisterResponseModel register(@RequestBody RegisterRequestModel data)
+    {
+        var response = new RegisterResponseModel();
 
+        if(data.getPassword() == null && data.getPassword().isEmpty()==true)
+        {
+            response.setMsg("password harus diisi");
+            return response;
+        }
+
+        if((data.getEmail() == null || data.getEmail().isEmpty()==true) && (data.getUsername() == null || data.getUsername().isEmpty() == true))
+        {
+            response.setMsg("email atau username tidak boleh kosong");
+            return response;
+        }
+
+        if(data.getEmail() != null && data.getEmail().isEmpty() == false)
+        {
+            var existByEmail = authService.findByEmail(data.getEmail());
+            if(existByEmail != null)
+            {
+                response.setMsg("email sudah dipakai");
+                return response;
+            }
+        }
+
+        if(data.getUsername() != null && data.getUsername().isEmpty() == false)
+        {
+            var existByUsername = authService.findByUsername(data.getUsername());
+            if(existByUsername!=null)
+            {
+                response.setMsg("username sudah dipakai");
+                return response;
+            }
+        }
+
+
+        var newUser = new AuthModel();
+        newUser.setPassword(data.getPassword());
+        newUser.setEmail(data.getEmail());
+        newUser.setUsername(data.getUsername());
+        newUser.setCreatedAt(LocalDateTime.now());
+        newUser.setUpdatedAt(LocalDateTime.now());
+
+        authService.registerNewUser(newUser);
+
+        response.setStatus(HttpStatus.OK);
+
+        return response;
+    }
 }

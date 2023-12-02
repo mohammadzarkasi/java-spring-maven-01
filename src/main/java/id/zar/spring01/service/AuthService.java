@@ -11,7 +11,7 @@ public class AuthService {
     public AuthService(AuthRepository authRepository) {
         this.authRepository = authRepository;
     }
-    public AuthModel loginByUsername(String username)
+    public AuthModel findByUsername(String username)
     {
         var result = authRepository.findAuthModelByUsername(username);
         if(result.isEmpty())
@@ -20,8 +20,18 @@ public class AuthService {
         }
         return result.get();
     }
-    public void loginByEmail(String email)
+    public AuthModel findByEmail(String email)
     {
-        authRepository.findAuthModelByEmail(email);
+//        authRepository.findAuthModelByEmail(email);
+        var result = authRepository.findAuthModelByEmail(email);
+        if(result.isEmpty())
+        {
+            return null;
+        }
+        return result.get();
+    }
+
+    public void registerNewUser(AuthModel newUser) {
+        authRepository.insert(newUser);
     }
 }

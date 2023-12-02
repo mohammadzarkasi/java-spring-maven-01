@@ -1,11 +1,10 @@
-package id.zar.spring01.HttpResponseModel;
+package id.zar.spring01.HttpModel.Responses;
 
-import id.zar.spring01.DbModel.AuthModel;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 
 @Data
-public class LoginResponseModel extends  GenericReponseModel {
+public class LoginResponseModel  {
     private String jwtToken;
     private String info;
 
