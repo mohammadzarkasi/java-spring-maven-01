@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Data
 //@Builder
-@Document
+@Document(collection = "auths")
 public class AuthModel {
     @Id
     private String id;
