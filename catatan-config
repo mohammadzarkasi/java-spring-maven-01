@@ -13,3 +13,5 @@ bisa menggunakan mongodb compass
     })
    misal:
     db.createUser({ user: "spring01", pwd: "spring01)(*", roles: ["root"] })
+
+ dokumentasi api bisa diakses di http://localhost:8080/swagger-ui/index.html
